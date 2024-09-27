@@ -3,174 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Quiz</title>
+    <title>OLYMPICS</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        * {
             margin: 0;
-            background-color: #0CC0DF; /* Background color */
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            width: 40%;
-            max-width: 800px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow */
-            padding: 20px;
-        }
-        img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            cursor: pointer;
-            border: 5px solid #0CC0DF; /* Outer blue border color */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .qa-box {
-            margin-top: 20px;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
             text-align: center;
         }
-        .question {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
         }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
         .answer {
-            font-size: 1.2em;
-            color: #555;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Text shadow */
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img id="quizImage" src="https://i.imgur.com/dHDZNij.png" alt="Quiz Image">
-        <div class="qa-box">
-            <div id="question" class="question">Click the image to get a question!</div>
-            <div id="answer" class="answer"></div>
-        </div>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>OLYMPICS</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
     </div>
-    
-    <script>
-        const questionsAndAnswers = [
-            { question: "Who won the gold medal in Men's 100m at the 1992 Barcelona Olympics?", answer: "Frankie Fredericks" },
-            { question: "Which country hosted the 1996 Summer Olympics?", answer: "United States" },
-            { question: "Who was the gold medalist in Women's Gymnastics All-Around at the 2000 Sydney Olympics?", answer: "Simone Biles" },
-            { question: "Which city was awarded the 2008 Summer Olympics?", answer: "Beijing" },
-            { question: "Who won the gold medal in Men's 100m at the 2012 London Olympics?", answer: "Usain Bolt" },
-            { question: "Which country hosted the 2016 Summer Olympics?", answer: "Brazil" },
-            { question: "Who won the gold medal in Women's Swimming 200m Freestyle at the 2020 Tokyo Olympics?", answer: "Katie Ledecky" },
-            { question: "Which city was awarded the 2024 Summer Olympics?", answer: "Paris" },
-            { question: "Who won the gold medal in Men's Basketball at the 1992 Barcelona Olympics?", answer: "USA" },
-            { question: "Who was the gold medalist in Women's 100m at the 2004 Athens Olympics?", answer: "Yulia Nesterenko" },
-            { question: "Which country hosted the 1994 Winter Olympics?", answer: "Norway" },
-            { question: "Who won the gold medal in Men's 400m at the 2008 Beijing Olympics?", answer: "LaShawn Merritt" },
-            { question: "Which city was awarded the 2010 Winter Olympics?", answer: "Vancouver" },
-            { question: "Who was the gold medalist in Women's 4x100m Relay at the 2016 Rio Olympics?", answer: "USA" },
-            { question: "Which country hosted the 2002 Winter Olympics?", answer: "Salt Lake City, USA" },
-            { question: "Who won the gold medal in Men's 100m Butterfly at the 2012 London Olympics?", answer: "Michael Phelps" },
-            { question: "Which city was awarded the 2018 Winter Olympics?", answer: "Pyeongchang" },
-            { question: "Who was the gold medalist in Women's Long Jump at the 1996 Atlanta Olympics?", answer: "Jackie Joyner-Kersee" },
-            { question: "Which country hosted the 2000 Summer Olympics?", answer: "Australia" },
-            { question: "Who won the gold medal in Men's Decathlon at the 2004 Athens Olympics?", answer: "Roman Sebrle" },
-            { question: "Which city was awarded the 2022 Winter Olympics?", answer: "Beijing" },
-            { question: "Who won the gold medal in Women's 200m at the 2000 Sydney Olympics?", answer: "Marion Jones" },
-            { question: "Which country hosted the 2012 Summer Olympics?", answer: "United Kingdom" },
-            { question: "Who was the gold medalist in Men's 10,000m at the 1996 Atlanta Olympics?", answer: "Dietrich T. H. O." },
-            { question: "Which city was awarded the 2016 Summer Olympics?", answer: "Rio de Janeiro" },
-            { question: "Who won the gold medal in Men's High Jump at the 2008 Beijing Olympics?", answer: "Andrey Silnov" },
-            { question: "Which country hosted the 2004 Summer Olympics?", answer: "Greece" },
-            { question: "Who was the gold medalist in Women's Heptathlon at the 2016 Rio Olympics?", answer: "Jessica Ennis-Hill" },
-            { question: "Which city was awarded the 1998 Winter Olympics?", answer: "Nagano" },
-            { question: "Who won the gold medal in Men's 4x100m Relay at the 2000 Sydney Olympics?", answer: "USA" },
-            { question: "Which country hosted the 2006 Winter Olympics?", answer: "Italy" },
-            { question: "Who was the gold medalist in Women's 800m at the 2012 London Olympics?", answer: "Alyson Felix" },
-            { question: "Which city was awarded the 2002 Winter Olympics?", answer: "Salt Lake City" },
-            { question: "Who won the gold medal in Men's 50m Freestyle at the 2016 Rio Olympics?", answer: "Kyle Chalmers" },
-            { question: "Which country hosted the 2000 Summer Olympics?", answer: "Australia" },
-            { question: "Who was the gold medalist in Women's 1500m at the 1996 Atlanta Olympics?", answer: "Diana Kaplan" },
-            { question: "Which city was awarded the 2008 Summer Olympics?", answer: "Beijing" },
-            { question: "Who won the gold medal in Men's 110m Hurdles at the 2004 Athens Olympics?", answer: "Liu Xiang" },
-            { question: "Which country hosted the 2014 Winter Olympics?", answer: "Russia" },
-            { question: "Who was the gold medalist in Women's 5000m at the 2020 Tokyo Olympics?", answer: "Sifan Hassan" },
-            { question: "Which city was awarded the 2012 Summer Olympics?", answer: "London" },
-            { question: "Who won the gold medal in Men's 800m at the 2000 Sydney Olympics?", answer: "Wilson Kipketer" },
-            { question: "Which country hosted the 2010 Winter Olympics?", answer: "Canada" },
-            { question: "Who was the gold medalist in Women's 4x400m Relay at the 2016 Rio Olympics?", answer: "USA" },
-            { question: "Which city was awarded the 2010 Winter Olympics?", answer: "Vancouver" },
-            { question: "Who won the gold medal in Men's 1500m at the 1992 Barcelona Olympics?", answer: "Fermin Cacho" },
-            { question: "Which country hosted the 2022 Winter Olympics?", answer: "China" },
-            { question: "Who was the gold medalist in Women's 4x100m Relay at the 2012 London Olympics?", answer: "USA" },
-            { question: "Which city was awarded the 2018 Winter Olympics?", answer: "Pyeongchang" },
-            { question: "Who won the gold medal in Men's 200m at the 2020 Tokyo Olympics?", answer: "Andre De Grasse" },
-            { question: "Which country hosted the 2016 Summer Olympics?", answer: "Brazil" },
-            { question: "Who was the gold medalist in Women's 3000m Steeplechase at the 2008 Beijing Olympics?", answer: "Eunice Jepkoech Sum" },
-            { question: "Which city was awarded the 1992 Summer Olympics?", answer: "Barcelona" },
-            { question: "Who won the gold medal in Men's 4x400m Relay at the 2012 London Olympics?", answer: "USA" },
-            { question: "Which country hosted the 2024 Summer Olympics?", answer: "France" },
-            { question: "Who was the gold medalist in Women's 100m at the 2008 Beijing Olympics?", answer: "Shelly-Ann Fraser-Pryce" },
-            { question: "Which city was awarded the 2000 Summer Olympics?", answer: "Sydney" },
-            { question: "Who won the gold medal in Men's 5000m at the 2008 Beijing Olympics?", answer: "Kenenisa Bekele" },
-            { question: "Which country hosted the 1992 Summer Olympics?", answer: "Spain" },
-            { question: "Who was the gold medalist in Women's 4x400m Relay at the 2008 Beijing Olympics?", answer: "USA" },
-            { question: "Which city was awarded the 2004 Summer Olympics?", answer: "Athens" },
-            { question: "Who won the gold medal in Men's 100m at the 1996 Atlanta Olympics?", answer: "Ben Johnson" },
-            { question: "Which country hosted the 2018 Winter Olympics?", answer: "South Korea" },
-            { question: "Who was the gold medalist in Men's 1500m at the 2008 Beijing Olympics?", answer: "Rashid Ramzi" },
-            { question: "Which city was awarded the 1998 Winter Olympics?", answer: "Nagano" },
-            { question: "Who won the gold medal in Women's 5000m at the 2012 London Olympics?", answer: "Vivian Cheruiyot" },
-            { question: "Which country hosted the 2004 Summer Olympics?", answer: "Greece" },
-            { question: "Who was the gold medalist in Men's 200m at the 2004 Athens Olympics?", answer: "Theodore H. Schneider" },
-            { question: "Which city was awarded the 1996 Summer Olympics?", answer: "Atlanta" },
-            { question: "Who won the gold medal in Women's 1500m at the 2000 Sydney Olympics?", answer: "Gabriela Szabo" },
-            { question: "Which country hosted the 2002 Winter Olympics?", answer: "USA" },
-            { question: "Who was the gold medalist in Men's 4x100m Relay at the 2020 Tokyo Olympics?", answer: "Italy" },
-            { question: "Which city was awarded the 1994 Winter Olympics?", answer: "Lillehammer" },
-            { question: "Who won the gold medal in Women's 4x100m Relay at the 1996 Atlanta Olympics?", answer: "USA" },
-            { question: "Which country hosted the 1994 Winter Olympics?", answer: "Norway" },
-            { question: "Who was the gold medalist in Men's 4x400m Relay at the 2004 Athens Olympics?", answer: "USA" },
-            { question: "Which city was awarded the 2010 Winter Olympics?", answer: "Vancouver" },
-            { question: "Who won the gold medal in Men's 800m at the 2016 Rio Olympics?", answer: "David Rudisha" },
-            { question: "Which country hosted the 2000 Summer Olympics?", answer: "Australia" },
-            { question: "Who was the gold medalist in Women's 4x100m Relay at the 2008 Beijing Olympics?", answer: "USA" },
-            { question: "Which city was awarded the 2014 Winter Olympics?", answer: "Sochi" },
-            { question: "Who won the gold medal in Men's 100m at the 2020 Tokyo Olympics?", answer: "Marcell Jacobs" },
-            { question: "Which country hosted the 1998 Winter Olympics?", answer: "Japan" },
-            { question: "Who was the gold medalist in Women's 200m at the 2004 Athens Olympics?", answer: "Gatlin S." },
-            { question: "Which city was awarded the 2004 Summer Olympics?", answer: "Athens" },
-            { question: "Who won the gold medal in Men's 4x100m Relay at the 1992 Barcelona Olympics?", answer: "USA" },
-            { question: "Which country hosted the 2006 Winter Olympics?", answer: "Italy" },
-            { question: "Who was the gold medalist in Women's 100m at the 1992 Barcelona Olympics?", answer: "Ginger Grant" },
-            { question: "Which city was awarded the 2022 Winter Olympics?", answer: "Beijing" },
-            { question: "Who won the gold medal in Men's 4x400m Relay at the 1996 Atlanta Olympics?", answer: "USA" },
-            { question: "Which country hosted the 1996 Summer Olympics?", answer: "USA" },
-            { question: "Who was the gold medalist in Women's 100m at the 1996 Atlanta Olympics?", answer: "Gail Devers" },
-            { question: "Which city was awarded the 2002 Winter Olympics?", answer: "Salt Lake City" },
-            { question: "Who won the gold medal in Men's 400m at the 2000 Sydney Olympics?", answer: "Michael Johnson" },
-            { question: "Which country hosted the 2012 Summer Olympics?", answer: "United Kingdom" },
-            { question: "Who was the gold medalist in Women's 200m at the 2016 Rio Olympics?", answer: "Elaine Thompson-Herah" },
-            { question: "Which city was awarded the 2008 Summer Olympics?", answer: "Beijing" },
-            { question: "Who won the gold medal in Men's 100m at the 2004 Athens Olympics?", answer: "Justin Gatlin" },
-            { question: "Which country hosted the 2024 Summer Olympics?", answer: "France" }
-        ];
+</div>
 
-        document.getElementById('quizImage').addEventListener('click', function() {
-            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
-            const question = questionsAndAnswers[randomIndex].question;
-            const answer = questionsAndAnswers[randomIndex].answer;
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "Who won the gold medal in Men's 100m at the 1992 Barcelona Olympics?", answer: "Frankie Fredericks" },
+        { question: "Which country hosted the 1996 Summer Olympics?", answer: "United States" },
+        { question: "Who was the gold medalist in Women's Gymnastics All-Around at the 2000 Sydney Olympics?", answer: "Simone Biles" },
+        { question: "Which city was awarded the 2008 Summer Olympics?", answer: "Beijing" },
+        { question: "Who won the gold medal in Men's 100m at the 2012 London Olympics?", answer: "Usain Bolt" },
+        { question: "Which country hosted the 2016 Summer Olympics?", answer: "Brazil" },
+        { question: "Who won the gold medal in Women's Swimming 200m Freestyle at the 2020 Tokyo Olympics?", answer: "Katie Ledecky" },
+        { question: "Which city was awarded the 2024 Summer Olympics?", answer: "Paris" },
+        { question: "Who won the gold medal in Men's Basketball at the 1992 Barcelona Olympics?", answer: "USA" },
+        { question: "Who was the gold medalist in Women's 100m at the 2004 Athens Olympics?", answer: "Yulia Nesterenko" },
+        { question: "Which country hosted the 1994 Winter Olympics?", answer: "Norway" },
+        { question: "Who won the gold medal in Men's 400m at the 2008 Beijing Olympics?", answer: "LaShawn Merritt" },
+        { question: "Which city was awarded the 2010 Winter Olympics?", answer: "Vancouver" },
+        { question: "Who was the gold medalist in Women's 4x100m Relay at the 2016 Rio Olympics?", answer: "USA" },
+        { question: "Which country hosted the 2002 Winter Olympics?", answer: "Salt Lake City, USA" },
+        { question: "Who won the gold medal in Men's 100m Butterfly at the 2012 London Olympics?", answer: "Michael Phelps" },
+        { question: "Which city was awarded the 2018 Winter Olympics?", answer: "Pyeongchang" },
+        { question: "Who was the gold medalist in Women's Long Jump at the 1996 Atlanta Olympics?", answer: "Jackie Joyner-Kersee" },
+        { question: "Which country hosted the 2000 Summer Olympics?", answer: "Australia" },
+        { question: "Who won the gold medal in Men's Decathlon at the 2004 Athens Olympics?", answer: "Roman Sebrle" },
+        { question: "Which city was awarded the 2022 Winter Olympics?", answer: "Beijing" },
+        { question: "Who won the gold medal in Women's 200m at the 2000 Sydney Olympics?", answer: "Marion Jones" },
+        { question: "Which country hosted the 2012 Summer Olympics?", answer: "United Kingdom" },
+        { question: "Who was the gold medalist in Men's 10,000m at the 1996 Atlanta Olympics?", answer: "Dietrich T. H. O." },
+        { question: "Which city was awarded the 2016 Summer Olympics?", answer: "Rio de Janeiro" },
+        { question: "Who won the gold medal in Men's High Jump at the 2008 Beijing Olympics?", answer: "Andrey Silnov" },
+        { question: "Which country hosted the 2004 Summer Olympics?", answer: "Greece" },
+        { question: "Who was the gold medalist in Women's Heptathlon at the 2016 Rio Olympics?", answer: "Jessica Ennis-Hill" },
+        { question: "Which city was awarded the 1998 Winter Olympics?", answer: "Nagano" },
+        { question: "Who won the gold medal in Men's 4x100m Relay at the 2000 Sydney Olympics?", answer: "USA" },
+        { question: "Which country hosted the 2006 Winter Olympics?", answer: "Italy" },
+        { question: "Who was the gold medalist in Women's 800m at the 2012 London Olympics?", answer: "Alyson Felix" },
+        { question: "Which city was awarded the 2002 Winter Olympics?", answer: "Salt Lake City" },
+        { question: "Who won the gold medal in Men's 50m Freestyle at the 2016 Rio Olympics?", answer: "Kyle Chalmers" },
+        { question: "Which country hosted the 2000 Summer Olympics?", answer: "Australia" },
+        { question: "Who was the gold medalist in Women's 1500m at the 1996 Atlanta Olympics?", answer: "Diana Kaplan" },
+        { question: "Which city was awarded the 2008 Summer Olympics?", answer: "Beijing" },
+        { question: "Who won the gold medal in Men's 110m Hurdles at the 2004 Athens Olympics?", answer: "Liu Xiang" },
+        { question: "Which country hosted the 2014 Winter Olympics?", answer: "Russia" },
+        { question: "Who was the gold medalist in Women's 5000m at the 2020 Tokyo Olympics?", answer: "Sifan Hassan" },
+        { question: "Which city was awarded the 2012 Summer Olympics?", answer: "London" },
+        { question: "Who won the gold medal in Men's 800m at the 2000 Sydney Olympics?", answer: "Wilson Kipketer" },
+        { question: "Which country hosted the 2010 Winter Olympics?", answer: "Canada" },
+        { question: "Who was the gold medalist in Women's 4x400m Relay at the 2016 Rio Olympics?", answer: "USA" },
+        { question: "Which city was awarded the 2010 Winter Olympics?", answer: "Vancouver" },
+        { question: "Who won the gold medal in Men's 1500m at the 1992 Barcelona Olympics?", answer: "Fermin Cacho" },
+        { question: "Which country hosted the 2022 Winter Olympics?", answer: "China" },
+        { question: "Who was the gold medalist in Women's 4x100m Relay at the 2012 London Olympics?", answer: "USA" },
+        { question: "Which city was awarded the 2018 Winter Olympics?", answer: "Pyeongchang" },
+        { question: "Who won the gold medal in Men's 200m at the 2020 Tokyo Olympics?", answer: "Andre De Grasse" },
+        { question: "Which country hosted the 2016 Summer Olympics?", answer: "Brazil" },
+        { question: "Who was the gold medalist in Women's 3000m Steeplechase at the 2008 Beijing Olympics?", answer: "Eunice Jepkoech Sum" },
+        { question: "Which city was awarded the 1992 Summer Olympics?", answer: "Barcelona" },
+        { question: "Who won the gold medal in Men's 4x400m Relay at the 2012 London Olympics?", answer: "USA" },
+        { question: "Which country hosted the 2024 Summer Olympics?", answer: "France" },
+        { question: "Who was the gold medalist in Women's 100m at the 2008 Beijing Olympics?", answer: "Shelly-Ann Fraser-Pryce" },
+        { question: "Which city was awarded the 2000 Summer Olympics?", answer: "Sydney" },
+        { question: "Who won the gold medal in Men's 5000m at the 2008 Beijing Olympics?", answer: "Kenenisa Bekele" },
+        { question: "Which country hosted the 1992 Summer Olympics?", answer: "Spain" },
+        { question: "Who was the gold medalist in Women's 4x400m Relay at the 2008 Beijing Olympics?", answer: "USA" },
+        { question: "Which city was awarded the 2004 Summer Olympics?", answer: "Athens" },
+        { question: "Who won the gold medal in Men's 100m at the 1996 Atlanta Olympics?", answer: "Ben Johnson" },
+        { question: "Which country hosted the 2018 Winter Olympics?", answer: "South Korea" },
+        { question: "Who was the gold medalist in Men's 1500m at the 2008 Beijing Olympics?", answer: "Rashid Ramzi" },
+        { question: "Which city was awarded the 1998 Winter Olympics?", answer: "Nagano" },
+        { question: "Who won the gold medal in Women's 5000m at the 2012 London Olympics?", answer: "Vivian Cheruiyot" },
+        { question: "Which country hosted the 2004 Summer Olympics?", answer: "Greece" },
+        { question: "Who was the gold medalist in Men's 200m at the 2004 Athens Olympics?", answer: "Theodore H. Schneider" },
+        { question: "Which city was awarded the 1996 Summer Olympics?", answer: "Atlanta" },
+        { question: "Who won the gold medal in Women's 1500m at the 2000 Sydney Olympics?", answer: "Gabriela Szabo" },
+        { question: "Which country hosted the 2002 Winter Olympics?", answer: "USA" },
+        { question: "Who was the gold medalist in Men's 4x100m Relay at the 2020 Tokyo Olympics?", answer: "Italy" },
+        { question: "Which city was awarded the 1994 Winter Olympics?", answer: "Lillehammer" },
+        { question: "Who won the gold medal in Women's 4x100m Relay at the 1996 Atlanta Olympics?", answer: "USA" },
+        { question: "Which country hosted the 1994 Winter Olympics?", answer: "Norway" },
+        { question: "Who was the gold medalist in Men's 4x400m Relay at the 2004 Athens Olympics?", answer: "USA" },
+        { question: "Which city was awarded the 2010 Winter Olympics?", answer: "Vancouver" },
+        { question: "Who won the gold medal in Men's 800m at the 2016 Rio Olympics?", answer: "David Rudisha" },
+        { question: "Which country hosted the 2000 Summer Olympics?", answer: "Australia" },
+        { question: "Who was the gold medalist in Women's 4x100m Relay at the 2008 Beijing Olympics?", answer: "USA" },
+        { question: "Which city was awarded the 2014 Winter Olympics?", answer: "Sochi" },
+        { question: "Who won the gold medal in Men's 100m at the 2020 Tokyo Olympics?", answer: "Marcell Jacobs" },
+        { question: "Which country hosted the 1998 Winter Olympics?", answer: "Japan" },
+        { question: "Who was the gold medalist in Women's 200m at the 2004 Athens Olympics?", answer: "Gatlin S." },
+        { question: "Which city was awarded the 2004 Summer Olympics?", answer: "Athens" },
+        { question: "Who won the gold medal in Men's 4x100m Relay at the 1992 Barcelona Olympics?", answer: "USA" },
+        { question: "Which country hosted the 2006 Winter Olympics?", answer: "Italy" },
+        { question: "Who was the gold medalist in Women's 100m at the 1992 Barcelona Olympics?", answer: "Ginger Grant" },
+        { question: "Which city was awarded the 2022 Winter Olympics?", answer: "Beijing" },
+        { question: "Who won the gold medal in Men's 4x400m Relay at the 1996 Atlanta Olympics?", answer: "USA" },
+        { question: "Which country hosted the 1996 Summer Olympics?", answer: "USA" },
+        { question: "Who was the gold medalist in Women's 100m at the 1996 Atlanta Olympics?", answer: "Gail Devers" },
+        { question: "Which city was awarded the 2002 Winter Olympics?", answer: "Salt Lake City" },
+        { question: "Who won the gold medal in Men's 400m at the 2000 Sydney Olympics?", answer: "Michael Johnson" },
+        { question: "Which country hosted the 2012 Summer Olympics?", answer: "United Kingdom" }
+    ];
 
-            document.getElementById('question').textContent = question;
-            document.getElementById('answer').textContent = answer;
-        });
-    </script>
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
 </body>
 </html>
